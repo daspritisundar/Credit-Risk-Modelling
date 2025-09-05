@@ -5,7 +5,15 @@ import pandas as pd
 import joblib
 
 model = joblib.load("models/xgb_credit_model.pkl")
-encoders= {col: joblib.load(f"{col}_encoder.okl") for col in["Sex","Housing","Saving accounts","Checking account"]}
+encoder_cols = {
+    "Sex": "Sex_encoder.okl",
+    "Housing": "Housing_encoder.okl",
+    "Saving accounts": "Saving_accounts_encoder.okl",
+    "Checking account": "Checking_account_encoder.okl"
+}
+
+encoders = {key: joblib.load(fname) for key, fname in encoder_cols.items()}
+
 
 st.title("Credit Risk Prediction App")
 st.write("Enter application information to predict if the credit risk is good ")
