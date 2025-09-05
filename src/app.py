@@ -19,7 +19,7 @@ checking_account=st.selectbox("Checking Accounts",["Moderate","little","rich"])
 credit_amount=st.number_input("Credit Amount",min_value=0,value=1000)
 duration=st.number_input("Duration(month)",min_value=12,value=12)
 
-input_df=pd,DataFrame({
+input_df=pd.DataFrame({
     "Age":[age],
     "Sex":[encoders["Sex"].transform([sex])[0]],
     "Job":[job],
