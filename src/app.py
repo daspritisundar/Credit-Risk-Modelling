@@ -51,7 +51,7 @@ input_df = pd.DataFrame([input_dict])
 
 # Predict button and output
 if st.button("Predict Risk"):
-    pred = model.predict(input_dict)[0]
+    pred = model.predict(input_df)[0]
     if pred == 1:
         st.success("✅ The predicted credit risk is: **GOOD** (Lower Risk)")
     else:
