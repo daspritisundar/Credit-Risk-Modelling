@@ -1,83 +1,40 @@
+# 1 Good(lower risk) 0 Bad (Higher Risk)
+
 import streamlit as st
 import pandas as pd
 import joblib
-import os
 
-# Paths for your model and encoders
-MODEL_PATH = "models/xgb_credit_model.pkl"
-ENCODER_PATHS = {
-    "sex": "models/Sex_encoder.pkl",
-    "housing": "models/Housing_encoder.pkl",
-    "saving_accounts": "models/Saving accounts_encoder.pkl",
-    "checking_account": "models/Checking account_encoder.pkl"
-}
-
-# Check if model file exists
-if not os.path.exists(MODEL_PATH):
-    st.error(f"Model file not found at: {MODEL_PATH}")
-    st.stop()
-
-model = joblib.load(MODEL_PATH)
-
-# Check and load encoders
-for key, path in ENCODER_PATHS.items():
-    if not os.path.exists(path):
-        st.error(f"Encoder file for '{key}' not found at: {path}")
-        st.stop()
-
-encoders = {key: joblib.load(path) for key, path in ENCODER_PATHS.items()}
+model=joblib.load("xgb_credit_model.pkl")
+encoders= {col: joblib.load(f"{col}_encoder.okl") for col in["Sex","Housing","Saving accounts","Checking account"]}
 
 st.title("Credit Risk Prediction App")
-st.write("Enter applicant information to predict credit risk")
+st.write("Enter application information to predict if the credit risk is good ")
 
-# User inputs with appropriate default values
-age = st.number_input("Age", min_value=18, max_value=75, value=35)
-sex = st.selectbox("Sex", ["male", "female"])
-job = st.number_input("Job (0-3)", min_value=0, max_value=3, value=2)
-housing = st.selectbox("Housing", ["own", "free", "rent"])
-saving_accounts = st.selectbox("Saving Accounts", ["little", "moderate", "rich", "quite rich", "NA"])
-checking_account = st.selectbox("Checking Account", ["little", "moderate", "rich", "NA"])
-credit_amount = st.number_input("Credit Amount", min_value=250, max_value=18424, value=1000)
-duration = st.number_input("Duration (months)", min_value=4, max_value=72, value=12)
+age=st.number_input("Age",min_value=18,max_value=100)
+sex=st.selectbox("Sex",["Male","Female"])
+job=st.number_input("Job(0-3)",min_value=0,max_value=10)
+housing=st.selectbox("Housing",["Rent","Own","Free"])
+saving_account=st.selectbox("Saving Accounts",["Little","moderate","rich","quite rich"])
+checking_account=st.selectbox("Checking Accounts",["Moderate","little","rich"]) 
+credit_amount=st.number_input("Credit Amount",min_value=0,value=1000)
+duration=st.number_input("Duration(month)",min_value=12,value=12)
 
-# Function to safely transform categorical input
-def safe_transform(encoder, value):
-    if value == "NA":
-        try:
-            return encoder.transform(["NA"])[0]
-        except ValueError:
-            return encoder.classes_.tolist().index("little") if "little" in encoder.classes_ else 0
-    else:
-        try:
-            return encoder.transform([value])[0]
-        except ValueError:
-            st.error(f"Invalid input value '{value}' for encoder.")
-            st.stop()
-
-# Prepare data for prediction
-input_data = {
-    "age": age,
-    "sex": safe_transform(encoders["sex"], sex),
-    "job": job,
-    "housing": safe_transform(encoders["housing"], housing),
-    "saving_accounts": safe_transform(encoders["saving_accounts"], saving_accounts),
-    "checking_account": safe_transform(encoders["checking_account"], checking_account),
-    "credit_amount": credit_amount,
-    "duration": duration
-}
-
-input_df = pd.DataFrame([input_data])
-
-# Ensure input columns match model features
-expected_features = model.get_booster().feature_names
-input_df = input_df[expected_features]
+input_df=pd,DataFrame({
+    "Age":[age],
+    "Sex":[encoders["Sex"].transform([sex])[0]],
+    "Job":[job],
+    "Housing":[encoders["Housing"].transform([housing])[0]],
+    "Saving accounts":[encoders["Saving accounts"].transform([saving_accounts])[0]],
+    "Checking accounts": [encoders["Checking accounts"].transform([checking_accounts])[0]],
+    "Credit amount":[credit_amount],
+    "Duration":[duration]
+})
 
 if st.button("Predict Risk"):
-    pred = model.predict(input_df)[0]
-    if pred == 1:
-        st.success("✅ The predicted credit risk is: GOOD (Low Risk)")
-    else:
-        st.error("⚠️ The predicted credit risk is: BAD (High Risk)")
+    pred=model.predict(input_df)[0]
 
-with st.expander("Show input details"):
-    st.json(input_data)
+    if pred==1:
+        st.success("The predicted credit risk is:**GOOD**")
+    else:
+        st.error("The predicted credit risk is: **BAD**")
+        
