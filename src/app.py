@@ -6,10 +6,10 @@ import joblib
 
 model = joblib.load("models/xgb_credit_model.pkl")
 encoder_cols = {
-    "Sex": "Sex_encoder.okl",
-    "Housing": "Housing_encoder.okl",
-    "Saving accounts": "Saving_accounts_encoder.okl",
-    "Checking account": "Checking_account_encoder.okl"
+    "Sex": "models/Sex_encoder.pkl",
+    "Housing": "models/Housing_encoder.pkl",
+    "Saving accounts": "models/Saving_accounts_encoder.pkl",
+    "Checking account": "models/Checking_account_encoder.pkl"
 }
 
 encoders = {key: joblib.load(fname) for key, fname in encoder_cols.items()}
