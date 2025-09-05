@@ -15,7 +15,7 @@ sex=st.selectbox("Sex",["male","female"])
 job=st.number_input("Job(0-3)",min_value=0,max_value=10)
 housing=st.selectbox("Housing",['own', 'rent', 'free'])
 saving_account=st.selectbox("Saving accounts",["little","moderate","rich","quite rich"])
-checking_account=st.selectbox("Checking account",["moderate","little","rich"]) 
+checking_account=st.selectbox("Checking account",["little","moderate","rich"]) 
 credit_amount=st.number_input("Credit amount",min_value=0,value=1000)
 duration=st.number_input("Duration(month)",min_value=12,value=12)
 
