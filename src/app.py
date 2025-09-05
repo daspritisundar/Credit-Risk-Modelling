@@ -19,19 +19,15 @@ checking_account=st.selectbox("Checking account",["little","moderate","rich"])
 credit_amount=st.number_input("Credit amount",min_value=0,value=1000)
 duration=st.number_input("Duration(month)",min_value=12,value=12)
 
-input_df=pd.DataFrame({
-    "Age":[age],
-    "Sex":[encoders["Sex"].transform([sex])[0]],
-    "Job":[job],
-    "Housing":[encoders["Housing"].transform([housing])[0]],
-    "Saving accounts":[encoders["Saving accounts"].transform([saving_account])[0]],
-    "Checking account": [encoders["Checking account"].transform([checking_account])[0]],
-    "Credit amount":[credit_amount],
-    "Duration":[duration]
-})
+input_df = input_df[model.get_booster().feature_names]
+
+expected_cols = model.get_booster().feature_names
+input_df = input_df[expected_cols] 
+
+
 
 if st.button("Predict Risk"):
-    pred=model.predict(input_df)[0]
+ pred = model.predict(input_df)[0]
 
     if pred==1:
         st.success("The predicted credit risk is:**GOOD**")
