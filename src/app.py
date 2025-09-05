@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-model=joblib.load("xgb_credit_model.pkl")
+model = joblib.load("models/xgb_credit_model.pkl")
 encoders= {col: joblib.load(f"{col}_encoder.okl") for col in["Sex","Housing","Saving accounts","Checking account"]}
 
 st.title("Credit Risk Prediction App")
