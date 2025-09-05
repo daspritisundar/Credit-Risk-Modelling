@@ -24,8 +24,8 @@ input_df=pd,DataFrame({
     "Sex":[encoders["Sex"].transform([sex])[0]],
     "Job":[job],
     "Housing":[encoders["Housing"].transform([housing])[0]],
-    "Saving accounts":[encoders["Saving accounts"].transform([saving accounts])[0]],
-    "Checking accounts": [encoders["Checking accounts"].transform([checking accounts])[0]],
+    "Saving accounts":[encoders["Saving accounts"].transform([saving_accounts])[0]],
+    "Checking accounts": [encoders["Checking accounts"].transform([checking_accounts])[0]],
     "Credit amount":[credit_amount],
     "Duration":[duration]
 })
