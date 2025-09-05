@@ -8,8 +8,8 @@ MODEL_PATH = "models/xgb_credit_model.pkl"
 ENCODER_PATHS = {
     "sex": "models/Sex_encoder.pkl",
     "housing": "models/Housing_encoder.pkl",
-    "saving_accounts": "models/Saving_accounts_encoder.pkl",
-    "checking_account": "models/Checking_account_encoder.pkl"
+    "saving_accounts": "models/Saving accounts_encoder.pkl",
+    "checking_account": "models/Checking account_encoder.pkl"
 }
 
 # Check if model file exists
