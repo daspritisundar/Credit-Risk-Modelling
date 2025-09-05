@@ -11,7 +11,7 @@ st.title("Credit Risk Prediction App")
 st.write("Enter application information to predict if the credit risk is good ")
 
 age=st.number_input("Age",min_value=18,max_value=100)
-sex=st.selectbox("Sex",["Male","Female"])
+sex=st.selectbox("Sex",["male","female"])
 job=st.number_input("Job(0-3)",min_value=0,max_value=10)
 housing=st.selectbox("Housing",["Rent","Own","Free"])
 saving_account=st.selectbox("Saving Accounts",["Little","moderate","rich","quite rich"])
@@ -24,8 +24,8 @@ input_df=pd.DataFrame({
     "Sex":[encoders["Sex"].transform([sex])[0]],
     "Job":[job],
     "Housing":[encoders["Housing"].transform([housing])[0]],
-    "Saving accounts":[encoders["Saving accounts"].transform([saving_accounts])[0]],
-    "Checking accounts": [encoders["Checking accounts"].transform([checking_accounts])[0]],
+    "Saving accounts":[encoders["Saving accounts"].transform([saving_account])[0]],
+    "Checking accounts": [encoders["Checking accounts"].transform([checking_account])[0]],
     "Credit amount":[credit_amount],
     "Duration":[duration]
 })
