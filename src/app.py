@@ -5,6 +5,7 @@ import pandas as pd
 import joblib
 
 model = joblib.load("models//xgb_credit_model.pkl")
+columns = joblib.load("models/xgb_credit_model_columns.pkl")
 encoders= {col: joblib.load(f"models//{col}_encoder.pkl") for col in["Sex","Housing","Saving accounts","Checking account"]}
 
 st.title("Credit Risk Prediction App")
@@ -19,7 +20,7 @@ checking_account=st.selectbox("Checking account",["little","moderate","rich"])
 credit_amount=st.number_input("Credit amount",min_value=0,value=1000)
 duration=st.number_input("Duration(month)",min_value=12,value=12)
 
-input_df = input_df[model.get_booster().feature_names]
+input_df = input_df[columns] 
 
 expected_cols = model.get_booster().feature_names
 input_df = input_df[expected_cols] 
