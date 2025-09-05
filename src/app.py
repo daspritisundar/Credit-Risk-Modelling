@@ -27,7 +27,7 @@ input_df = input_df[expected_cols]
 
 
 if st.button("Predict Risk"):
- pred = model.predict(input_df)[0]
+pred = model.predict(input_df)[0]
 
     if pred==1:
         st.success("The predicted credit risk is:**GOOD**")
