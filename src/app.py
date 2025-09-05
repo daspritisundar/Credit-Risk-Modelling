@@ -1,62 +1,83 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import os
 
-# Load model and encoders from correct paths
-model = joblib.load("models/xgb_credit_model.pkl")
-
-# Encoders with filenames adjusted to avoid spaces in filenames
-encoder_files = {
-    "Sex": "models/Sex_encoder.pkl",
-    "Housing": "models/Housing_encoder.pkl",
-    "Saving accounts": "models/Saving accounts_encoder.pkl",
-    "Checking account": "models/Checking account_encoder.pkl"
+# Paths for your model and encoders
+MODEL_PATH = "models/xgb_credit_model.pkl"
+ENCODER_PATHS = {
+    "sex": "models/Sex_encoder.pkl",
+    "housing": "models/Housing_encoder.pkl",
+    "saving_accounts": "models/Saving_accounts_encoder.pkl",
+    "checking_account": "models/Checking_account_encoder.pkl"
 }
-encoders = {key: joblib.load(fname) for key, fname in encoder_files.items()}
+
+# Check if model file exists
+if not os.path.exists(MODEL_PATH):
+    st.error(f"Model file not found at: {MODEL_PATH}")
+    st.stop()
+
+model = joblib.load(MODEL_PATH)
+
+# Check and load encoders
+for key, path in ENCODER_PATHS.items():
+    if not os.path.exists(path):
+        st.error(f"Encoder file for '{key}' not found at: {path}")
+        st.stop()
+
+encoders = {key: joblib.load(path) for key, path in ENCODER_PATHS.items()}
 
 st.title("Credit Risk Prediction App")
 st.write("Enter applicant information to predict credit risk")
 
-# Input widgets
-age = st.number_input("Age", min_value=18, max_value=100, value=35)
-sex = st.selectbox("Sex", ["Male", "Female"])
-job = st.number_input("Job (0-3)", min_value=0, max_value=10, value=2)
-housing = st.selectbox("Housing", ["Rent", "Own", "Free"])
-saving_account = st.selectbox("Saving Accounts", ["Little", "moderate", "rich", "quite rich"])
-checking_account = st.selectbox("Checking Accounts", ["Moderate", "little", "rich"])
-credit_amount = st.number_input("Credit Amount", min_value=0, value=1000)
-duration = st.number_input("Duration (months)", min_value=12, max_value=72, value=12)
+# User inputs with appropriate default values
+age = st.number_input("Age", min_value=18, max_value=75, value=35)
+sex = st.selectbox("Sex", ["male", "female"])
+job = st.number_input("Job (0-3)", min_value=0, max_value=3, value=2)
+housing = st.selectbox("Housing", ["own", "free", "rent"])
+saving_accounts = st.selectbox("Saving Accounts", ["little", "moderate", "rich", "quite rich", "NA"])
+checking_account = st.selectbox("Checking Account", ["little", "moderate", "rich", "NA"])
+credit_amount = st.number_input("Credit Amount", min_value=250, max_value=18424, value=1000)
+duration = st.number_input("Duration (months)", min_value=4, max_value=72, value=12)
 
-# Normalize categorical inputs to encoder expected format (lowercase)
+# Function to safely transform categorical input
 def safe_transform(encoder, value):
-    try:
-        return encoder.transform([value.lower()])[0]
-    except ValueError:
-        st.error(f"Invalid input value '{value}' for encoder.")
-        st.stop()
+    if value == "NA":
+        try:
+            return encoder.transform(["NA"])[0]
+        except ValueError:
+            return encoder.classes_.tolist().index("little") if "little" in encoder.classes_ else 0
+    else:
+        try:
+            return encoder.transform([value])[0]
+        except ValueError:
+            st.error(f"Invalid input value '{value}' for encoder.")
+            st.stop()
 
-# Prepare input dataframe with transformed categorical values
-input_dict = {
-    "Age": age,
-    "Sex": safe_transform(encoders["Sex"], sex),
-    "Job": job,
-    "Housing": safe_transform(encoders["Housing"], housing),
-    "Saving accounts": safe_transform(encoders["Saving accounts"], saving_account),
-    "Checking account": safe_transform(encoders["Checking account"], checking_account),
-    "Credit amount": credit_amount,
-    "Duration": duration
+# Prepare data for prediction
+input_data = {
+    "age": age,
+    "sex": safe_transform(encoders["sex"], sex),
+    "job": job,
+    "housing": safe_transform(encoders["housing"], housing),
+    "saving_accounts": safe_transform(encoders["saving_accounts"], saving_accounts),
+    "checking_account": safe_transform(encoders["checking_account"], checking_account),
+    "credit_amount": credit_amount,
+    "duration": duration
 }
 
-input_df = pd.DataFrame([input_dict])
+input_df = pd.DataFrame([input_data])
 
-# Predict button and output
+# Ensure input columns match model features
+expected_features = model.get_booster().feature_names
+input_df = input_df[expected_features]
+
 if st.button("Predict Risk"):
     pred = model.predict(input_df)[0]
     if pred == 1:
-        st.success("✅ The predicted credit risk is: **GOOD** (Lower Risk)")
+        st.success("✅ The predicted credit risk is: GOOD (Low Risk)")
     else:
-        st.error("⚠️ The predicted credit risk is: **BAD** (Higher Risk)")
+        st.error("⚠️ The predicted credit risk is: BAD (High Risk)")
 
-# Optional: show input summary for user confirmation
 with st.expander("Show input details"):
-    st.json(input_dict)
+    st.json(input_data)
