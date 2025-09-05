@@ -5,7 +5,7 @@ import pandas as pd
 import joblib
 
 model = joblib.load("models//xgb_credit_model.pkl")
-encoders= {col: joblib.load(f"{col}_encoder.okl") for col in["Sex","Housing","Saving accounts","Checking account"]}
+encoders= {col: joblib.load(f"{col}_encoder.pkl") for col in["Sex","Housing","Saving accounts","Checking account"]}
 
 st.title("Credit Risk Prediction App")
 st.write("Enter application information to predict if the credit risk is good ")
