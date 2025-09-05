@@ -9,8 +9,8 @@ model = joblib.load("models/xgb_credit_model.pkl")
 encoder_files = {
     "Sex": "models/Sex_encoder.pkl",
     "Housing": "models/Housing_encoder.pkl",
-    "Saving accounts": "models/Saving_accounts_encoder.pkl",
-    "Checking account": "models/Checking_account_encoder.pkl"
+    "Saving accounts": "models/Saving accounts_encoder.pkl",
+    "Checking account": "models/Checking account_encoder.pkl"
 }
 encoders = {key: joblib.load(fname) for key, fname in encoder_files.items()}
 
