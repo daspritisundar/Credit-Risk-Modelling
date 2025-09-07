@@ -38,7 +38,7 @@ try:
         "Job": [job],
         "Housing": [encoders["Housing"].transform([housing])[0]],
         "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
-        "Checking accounts": [encoders["Checking accounts"].transform([checking_account])[0]],
+        "Checking accounts": [encoders["Checking account"].transform([checking_account])[0]],
         "Credit amount": [credit_amount],
         "Duration": [duration]
     })
