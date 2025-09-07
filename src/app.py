@@ -39,17 +39,22 @@ purpose = st.selectbox(
 )
 
 # Prepare input dataframe
-input_df = pd.DataFrame({
-    "Age": [age],
-    "Sex": [encoders["Sex"].transform([sex])[0]],
-    "Job": [job],
-    "Housing": [encoders["Housing"].transform([housing])[0]],
-    "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
-    "Checking account": [encoders["Checking account"].transform([checking_account])[0]],  # FIXED
-    "Credit amount": [credit_amount],
-    "Duration": [duration],
-    "Purpose": [encoders["Purpose"].transform([purpose])[0] if "Purpose" in encoders else purpose]
-})
+try:
+    input_df = pd.DataFrame({
+        "Age": [age],
+        "Sex": [encoders["Sex"].transform([sex])[0]],
+        "Job": [job],
+        "Housing": [encoders["Housing"].transform([housing])[0]],
+        "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
+        "Checking account": [encoders["Checking account"].transform([checking_account])[0]],
+        "Credit amount": [credit_amount],
+        "Duration": [duration],
+        "Purpose": [encoders["Purpose"].transform([purpose])[0]]  # FIXED
+    })
+except Exception as e:
+    st.error(f"Encoding error: {e}")
+    st.stop()
+
 
 
 # Prediction button
