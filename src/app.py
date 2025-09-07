@@ -7,7 +7,7 @@ model = joblib.load("models//xgb_credit_model.pkl")
 
 # Load encoders (make sure these files exist in 'models/' folder)
 encoder_cols = ["Sex", "Housing", "Saving accounts", "Checking accounts"]
-encoders = {col: joblib.load(f"models//{col}_encoder.pkl") for col in encoder_cols}
+encoders = {col: joblib.load(f"models/{col}_encoder.pkl") for col in encoder_cols}
 
 # Streamlit UI
 st.set_page_config(page_title="Credit Risk Prediction", page_icon="💳", layout="centered")
