@@ -30,21 +30,27 @@ with col2:
     credit_amount = st.number_input("Credit Amount", min_value=0, value=1000, step=100)
     duration = st.number_input("Duration (months)", min_value=4, max_value=72, value=12)
 
+# Add Purpose field
+purpose = st.selectbox(
+    "Purpose",
+    encoders["Purpose"].classes_ if "Purpose" in encoders else 
+    ["radio/TV", "education", "furniture/equipment", "car", 
+     "business", "domestic appliances", "repairs", "vacation/others"]
+)
+
 # Prepare input dataframe
-try:
-    input_df = pd.DataFrame({
-        "Age": [age],
-        "Sex": [encoders["Sex"].transform([sex])[0]],
-        "Job": [job],
-        "Housing": [encoders["Housing"].transform([housing])[0]],
-        "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
-        "Checking accounts": [encoders["Checking account"].transform([checking_account])[0]],
-        "Credit amount": [credit_amount],
-        "Duration": [duration]
-    })
-except Exception as e:
-    st.error(f"Encoding error: {e}")
-    st.stop()
+input_df = pd.DataFrame({
+    "Age": [age],
+    "Sex": [encoders["Sex"].transform([sex])[0]],
+    "Job": [job],
+    "Housing": [encoders["Housing"].transform([housing])[0]],
+    "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
+    "Checking account": [encoders["Checking account"].transform([checking_account])[0]],  # FIXED
+    "Credit amount": [credit_amount],
+    "Duration": [duration],
+    "Purpose": [encoders["Purpose"].transform([purpose])[0] if "Purpose" in encoders else purpose]
+})
+
 
 # Prediction button
 if st.button("🔮 Predict Risk"):
