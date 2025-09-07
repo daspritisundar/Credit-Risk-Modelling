@@ -26,7 +26,7 @@ with col1:
 
 with col2:
     saving_account = st.selectbox("Saving Accounts", encoders["Saving accounts"].classes_)
-    checking_account = st.selectbox("Checking Accounts", encoders["Checking accounts"].classes_)
+    checking_account = st.selectbox("Checking Accounts", encoders["Checking account"].classes_)
     credit_amount = st.number_input("Credit Amount", min_value=0, value=1000, step=100)
     duration = st.number_input("Duration (months)", min_value=4, max_value=72, value=12)
 
