@@ -3,6 +3,36 @@ import pandas as pd
 import joblib
 from sklearn.preprocessing import LabelEncoder
 
+# Custom CSS for classy background
+page_bg = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* Elegant gradient */
+    color: white;
+}
+
+[data-testid="stHeader"] {
+    background: rgba(0,0,0,0);
+}
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #141e30, #243b55);
+    color: white;
+}
+
+h1, h2, h3, h4 {
+    color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.css-1d391kg, .stSelectbox, .stNumberInput, .stButton {
+    font-family: 'Segoe UI', sans-serif;
+}
+</style>
+"""
+
+st.markdown(page_bg, unsafe_allow_html=True)
+
 # Load model
 model = joblib.load("models/xgb_credit_model.pkl")
 
