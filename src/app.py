@@ -26,7 +26,7 @@ with col1:
 
 with col2:
     saving_account = st.selectbox("Saving Accounts", encoders["Saving accounts"].classes_)
-    checking_account = st.selectbox("Checking Accounts", encoders["Checking accounts"].classes_)
+    checking_account = st.selectbox("Checking Account", encoders["Checking account"].classes_)
     credit_amount = st.number_input("Credit Amount", min_value=0, value=1000, step=100)
     duration = st.number_input("Duration (months)", min_value=4, max_value=72, value=12)
 
@@ -38,7 +38,7 @@ try:
         "Job": [job],
         "Housing": [encoders["Housing"].transform([housing])[0]],
         "Saving accounts": [encoders["Saving accounts"].transform([saving_account])[0]],
-        "Checking accounts": [encoders["Checking accounts"].transform([checking_account])[0]],
+        "Checking accounts": [encoders["Checking account"].transform([checking_account])[0]],
         "Credit amount": [credit_amount],
         "Duration": [duration]
     })
